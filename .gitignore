@@ -1,2 +1,6 @@
 /venv
 /.idea
+/data
+/test_ideas.ipynb
+/.ipynb_checkpoints/
+/config.py
