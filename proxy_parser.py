@@ -14,11 +14,11 @@ def parse_proxies(html: str) -> list:
     return proxies
 
 
-def main():
+def get_proxies():
     url = proxies_url
     html = get_page(url)
     return parse_proxies(html)
 
 
 if __name__ == '__main__':
-    main()
+    get_proxies()
