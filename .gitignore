@@ -4,3 +4,5 @@
 /test_ideas.ipynb
 /.ipynb_checkpoints/
 /config.py
+/selenium/
+/telegram_bot/config.py
