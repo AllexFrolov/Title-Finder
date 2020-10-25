@@ -19,7 +19,7 @@ class TelegramBot:
         @self.bot.callback_query_handler(lambda query: query.data == 'button_1')
         def process_callback(query):
             self.bot.stop_polling()
-            self.answer = 'new_capcha'
+            self.answer = 'new_captcha'
 
     def send_photo(self, img: bytes):
         keyboard = button_add()
