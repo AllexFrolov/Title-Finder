@@ -10,5 +10,6 @@ def get_page(url: str,
     page = requests.get(url, headers=useragent, proxies=proxy)
     if encoding:
         page.encoding = encoding
-    page.raise_for_status()
+    if page.status_code != requests.codes.ok:
+        print(f'{page.status_code}, Bad link {url}')
     return page.text
