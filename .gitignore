@@ -1,10 +1,12 @@
 /venv
 /.idea
 /data
-/test_ideas.ipynb
 /.ipynb_checkpoints/
 /config.py
 /selenium/
 /telegram_bot/config.py
 /debug.log
 /telegram_bot/tele_config.py
+__pycache__/
+telegram_bot/__pycache__/
+telegram_bot/bot/__pycache__/
