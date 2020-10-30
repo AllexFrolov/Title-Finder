@@ -1,13 +1,16 @@
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
 import time
-import config
-
 from importlib import reload
+
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+import config
 import telegram_bot
+from telegram_bot.tele_config import token, user_id
+
 telegram_bot = reload(telegram_bot)
 from telegram_bot.telegram_bot import TelegramBot
 
@@ -19,15 +22,12 @@ class SiteBot(object):
         self.telegram_bot = telegram_bot
 
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("user-data-dir=selenium")
-        # chrome_options.add_argument('--window-size=1920x1080')
-        chrome_options.add_argument('--start-maximized')
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument('--window-size=1920x1080')
 
-        # chrome_options.add_argument('--headless')
-        # chrome_options.add_argument('--no-sandbox')
-        # chrome_options.add_argument('--disable-dev-shm-usage')
         self._driver = webdriver.Chrome(executable_path=self._path, options=chrome_options)
-        # self._driver.set_window_size(1920, 1080)
         self._driver.wait = WebDriverWait(self._driver, 5)
 
     def go_to_the_page(self, page_number: int = 0):
@@ -63,7 +63,7 @@ class SiteBot(object):
 
 
 if __name__ == '__main__':
-    tel_bot = TelegramBot()
+    tel_bot = TelegramBot(token, user_id)
     driver = SiteBot(config.driver_path, config.yandex_url, tel_bot)
     page = 0
     while True:
