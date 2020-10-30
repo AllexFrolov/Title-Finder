@@ -7,3 +7,4 @@
 /selenium/
 /telegram_bot/config.py
 /debug.log
+/telegram_bot/tele_config.py
