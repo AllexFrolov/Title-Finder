@@ -40,18 +40,19 @@ def get_all_links(site: str, start_page: int = 0):
     tel_bot = TelegramBot(token, user_id)
     # get site token
     site_token = config.site_news_tokens.get(site, False)
+    site_base_url = config.yandex_url
     if site_token:
-        site_url = config.yandex_url + site_token + '&p='
+        site_base_url += site_token + '&p='
     else:
         raise ValueError(f'site should be in {list(config.site_news_tokens.keys())}')
 
-    driver = SiteBot(config.driver_path, site_url, tel_bot)
+    driver = SiteBot(config.driver_path, tel_bot)
 
     links = []
     while True:
         print(start_page)
         sleep(uniform(2, 5))
-        html = driver.get_order_page(start_page)
+        html = driver.get_order_page(site_base_url + str(start_page))
 
         site_links = parse_links(html)
 
