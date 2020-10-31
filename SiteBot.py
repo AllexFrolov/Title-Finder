@@ -1,5 +1,4 @@
 import time
-from importlib import reload
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -7,18 +6,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-import config
-import telegram_bot
-from telegram_bot.tele_config import token, user_id
-
-telegram_bot = reload(telegram_bot)
-from telegram_bot.telegram_bot import TelegramBot
-
 
 class SiteBot(object):
-    def __init__(self, driver_path, base_url, telegram_bot):
+    """
+    Selenium bot for Yandex.
+    Loaded site, send the captcha to telegram, then send answer to the site
+    """
+
+    def __init__(self, driver_path, telegram_bot):
+        """
+        Open chrom browser with headless options
+        :param driver_path: path to chromedriver.exe file
+        :param telegram_bot: TelegramBot
+        """
         self._path = driver_path
-        self.site_link = base_url
         self.telegram_bot = telegram_bot
 
         chrome_options = webdriver.ChromeOptions()
@@ -30,12 +31,11 @@ class SiteBot(object):
         self._driver = webdriver.Chrome(executable_path=self._path, options=chrome_options)
         self._driver.wait = WebDriverWait(self._driver, 5)
 
-    def go_to_the_page(self, page_number: int = 0):
-        self._driver.get(self.site_link + str(page_number))
-        time.sleep(2)
-        self.capcha_check()
-
     def capcha_check(self):
+        """
+        try to find the captcha box and submit button.
+        If finds it sends the photo to the telegram.
+        """
         while True:
             try:
                 capcha_box = self._driver.wait.until(EC.presence_of_element_located((By.NAME, 'rep')))
@@ -56,17 +56,15 @@ class SiteBot(object):
             except TimeoutException:
                 break
 
-    def get_order_page(self, page_number: int = 0):
-        self.go_to_the_page(page_number)
+    def get_order_page(self, url: str):
+        """
+        Upload site check captcha and return HTML code
+
+        :param url: site url
+        :return: HTML code
+        """
+        self._driver.get(url)
+        time.sleep(2)
+        self.capcha_check()
         html = self._driver.page_source
         return html
-
-
-if __name__ == '__main__':
-    tel_bot = TelegramBot(token, user_id)
-    driver = SiteBot(config.driver_path, config.yandex_url, tel_bot)
-    page = 0
-    while True:
-        print(page)
-        html = driver.get_order_page(page)
-        page += 1
